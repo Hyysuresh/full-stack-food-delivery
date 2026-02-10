@@ -86,7 +86,7 @@ pipeline {
         stage('Security Scan with Trivy') {
             steps {
                 script {
-                    sh "mkdir -p trivy-result",
+                    sh "mkdir -p trivy-result"
                     echo "start for checking security"
                     
                     trivyScan(
