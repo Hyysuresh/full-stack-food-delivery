@@ -127,8 +127,8 @@ pipeline {
                     steps {
                         script {
                             pushDockerImage (
-                                imageName: env.DOCKER_IMAGE_FRONTEND_NAME
-                                imageTag: env.DOCKER_IMAGE_TAG
+                                imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 credentails: 'DockerHubCreds'
                             )
                         }
@@ -138,8 +138,8 @@ pipeline {
                     steps {
                         script {
                             pushDockerImage (
-                                imageName: env.DOCKER_IMAGE_BACKEND_NAME
-                                imageTag: env.DOCKER_IMAGE_TAG
+                                imageName: env.DOCKER_IMAGE_BACKEND_NAME,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 credentails: 'DockerHubCreds'
                             )
                         }
@@ -149,8 +149,8 @@ pipeline {
                     steps {
                         script {
                             pushDockerImage (
-                                imageName: env.DOCKER_IMAGE_ADMIN_NAME
-                                imageTag: env.DOCKER_IMAGE_TAG
+                                imageName: env.DOCKER_IMAGE_ADMIN_NAME,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 credentails: 'DockerHubCreds'
                             )
                         }
