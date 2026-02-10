@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                    echo "Last git coomit massage: ${commitMassage}"
+                    echo "Last git coomit message: ${commitMessage}"
                     if (commitMessage.contains('[ci skip]') || commitMessage.contains('[skip ci]')) {
                         echo "Found CI skip directive in commit message, aborting build"
                         currentBuild.result = 'ABORTED'
@@ -44,9 +44,9 @@ pipeline {
                 stage('frontend image build') {
                     steps {
                         script {
-                            pushDockerImage (
+                            buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
-                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 dockerfile: 'frontend/Dockerfile',
                                 context: '.'
                             )
@@ -56,9 +56,9 @@ pipeline {
                 stage('backend image build') {
                     steps {
                         script {
-                            pushDockerImage (
+                            buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_BACKEND_NAME,
-                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 dockerfile: 'backend/Dockerfile',
                                 context: '.'
                             )
@@ -68,9 +68,9 @@ pipeline {
                 stage('admin image build') {
                     steps {
                         script {
-                            pushDockerImage (
+                            buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_ADMIN_NAME,
-                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                imageTag: env.DOCKER_IMAGE_TAG,
                                 dockerfile: 'admin/Dockerfile',
                                 context: '.'
                             )
@@ -126,27 +126,33 @@ pipeline {
                 stage ('frontend image push') {
                     steps {
                         script {
-                            imageName: env.DOCKER_IMAGE_FRONTEND_NAME
-                            imageTag: env.DOCKER_IMAGE_TAG
-                            credentails: 'DockerHubCreds'
+                            pushDockerImage (
+                                imageName: env.DOCKER_IMAGE_FRONTEND_NAME
+                                imageTag: env.DOCKER_IMAGE_TAG
+                                credentails: 'DockerHubCreds'
+                            )
                         }
                     }
                 }
                 stage ('backend image push') {
                     steps {
                         script {
-                            imageName: env.DOCKER_IMAGE_BACKEND_NAME
-                            imageTag: env.DOCKER_IMAGE_TAG
-                            credentails: 'DockerHubCreds'
+                            pushDockerImage (
+                                imageName: env.DOCKER_IMAGE_BACKEND_NAME
+                                imageTag: env.DOCKER_IMAGE_TAG
+                                credentails: 'DockerHubCreds'
+                            )
                         }
                     }
                 }
                 stage ('admin image push') {
                     steps {
                         script {
-                            imageName: env.DOCKER_IMAGE_ADMIN_NAME
-                            imageTag: env.DOCKER_IMAGE_TAG
-                            credentails: 'DockerHubCreds'
+                            pushDockerImage (
+                                imageName: env.DOCKER_IMAGE_ADMIN_NAME
+                                imageTag: env.DOCKER_IMAGE_TAG
+                                credentails: 'DockerHubCreds'
+                            )
                         }
                     }
                 }
