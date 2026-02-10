@@ -15,9 +15,9 @@ pipeline {
         stage('Check  ci skip') {
             steps {
                 script {
-                    def commitMassage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                     echo "Last git coomit massage: ${commitMassage}"
-                    if (commitMassage.contains('[ ci skip ]') || commitMassage.contains('[ skip ci ]')) {
+                    if (commitMessage.contains('[ci skip]') || commitMessage.contains('[skip ci]')) {
                         echo "Found CI skip directive in commit message, aborting build"
                         currentBuild.result = 'ABORTED'
                         error("Build skipped due to [ci skip] directive")
