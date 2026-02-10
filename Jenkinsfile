@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE_FRONTEND_NAME= 'hyysuresh/food-delivery-frontend'
         DOCKER_IMAGE_BACKEND_NAME = 'hyysuresh/food-delivery-backend'
         DOCKER_IMAGE_ADMIN_NAME = 'hyysuresh/food-delivery-admin'
-        DOCKER_IIMAGE_TAG = '${BUILD_NUMBER}'
+        DOCKER_IMAGE_TAG = '${BUILD_NUMBER}'
         AWS_CREDENTIALS = credentials('AwsCreds')
         GITHUB_CREDENTIALS = credentials('GitHubCreds')
         GIT_BRANCH = 'main'
@@ -44,7 +44,7 @@ pipeline {
                 stage('frontend image build') {
                     steps {
                         script {
-                            buildDockerImage (
+                            pushDockerImage (
                                 imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
                                 dockerfile: 'frontend/Dockerfile',
@@ -56,7 +56,7 @@ pipeline {
                 stage('backend image build') {
                     steps {
                         script {
-                            buildDockerImage (
+                            pushDockerImage (
                                 imageName: env.DOCKER_IMAGE_BACKEND_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
                                 dockerfile: 'backend/Dockerfile',
@@ -68,7 +68,7 @@ pipeline {
                 stage('admin image build') {
                     steps {
                         script {
-                            buildDockerImage (
+                            pushDockerImage (
                                 imageName: env.DOCKER_IMAGE_ADMIN_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
                                 dockerfile: 'admin/Dockerfile',
