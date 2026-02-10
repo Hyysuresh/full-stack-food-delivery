@@ -6,7 +6,8 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 #copy package files to the working directory
-COPY package.json package-lock.json ./
+COPY frontend/package.json ./
+COPY frontend/package-lock.json ./
 
 # install dependencies
 RUN npm install 
