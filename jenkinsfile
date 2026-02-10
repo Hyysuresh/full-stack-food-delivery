@@ -47,7 +47,7 @@ pipeline {
                             buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
-                                dockerfile: 'Dockerfile',
+                                dockerfile: 'frontend/Dockerfile',
                                 context: '.'
                             )
                         }
@@ -59,7 +59,7 @@ pipeline {
                             buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_BACKEND_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
-                                dockerfile: 'Dockerfile',
+                                dockerfile: 'backend/Dockerfile',
                                 context: '.'
                             )
                         }
@@ -71,7 +71,7 @@ pipeline {
                             buildDockerImage (
                                 imageName: env.DOCKER_IMAGE_ADMIN_NAME,
                                 imageTag: env.DOCKER_IIMAGE_TAG,
-                                dockerfile: 'Dockerfile',
+                                dockerfile: 'admin/Dockerfile',
                                 context: '.'
                             )
                         }
