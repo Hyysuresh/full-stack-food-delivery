@@ -6,7 +6,6 @@ pipeline {
         DOCKER_IMAGE_BACKEND_NAME = 'hyysuresh/food-delivery-backend'
         DOCKER_IMAGE_ADMIN_NAME = 'hyysuresh/food-delivery-admin'
         DOCKER_IMAGE_TAG = '${BUILD_NUMBER}'
-        AWS_CREDENTIALS = credentials('AwsCreds')
         GITHUB_CREDENTIALS = credentials('GitHubCreds')
         GIT_BRANCH = 'main'
         
