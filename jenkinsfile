@@ -1,0 +1,156 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_IMAGE_FRONTEND_NAME= 'hyysuresh/food-delivery-frontend'
+        DOCKER_IMAGE_BACKEND_NAME = 'hyysuresh/food-delivery-backend'
+        DOCKER_IMAGE_ADMIN_NAME = 'hyysuresh/food-delivery-admin'
+        DOCKER_IIMAGE_TAG = '${BUILD_NUMBER}'
+        AWS_CREDENTIALS = credentials('AwsCreds')
+        GITHUB_CREDENTIALS = credentials('GitHubCreds')
+        GIT_BRANCH = 'main'
+        
+    }
+    stages {
+        stage('Check  ci skip') {
+            steps {
+                script {
+                    def commitMassage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    echo "Last git coomit massage: ${commitMassage}"
+                    if (commitMassage.contains('[ ci skip ]') || commitMassage.contains('[ skip ci ]')) {
+                        echo "Found CI skip directive in commit message, aborting build"
+                        currentBuild.result = 'ABORTED'
+                        error("Build skipped due to [ci skip] directive")
+                    }
+                }
+            }
+        }
+        stage("clean workspace") {
+            steps {
+                script {
+                    cleanupWorkspace()
+                }
+            }
+        }
+        stage('clone Repo') {
+            steps {
+                script {
+                    cloneRepo()
+                }
+            }
+        }
+        stage('build Image') {
+            parallel {
+                stage('frontend image build') {
+                    steps {
+                        script {
+                            buildDockerImage (
+                                imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
+                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                dockerfile: 'Dockerfile',
+                                context: '.'
+                            )
+                        }
+                    }
+                }
+                stage('backend image build') {
+                    steps {
+                        script {
+                            buildDockerImage (
+                                imageName: env.DOCKER_IMAGE_BACKEND_NAME,
+                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                dockerfile: 'Dockerfile',
+                                context: '.'
+                            )
+                        }
+                    }
+                }
+                stage('admin image build') {
+                    steps {
+                        script {
+                            buildDockerImage (
+                                imageName: env.DOCKER_IMAGE_ADMIN_NAME,
+                                imageTag: env.DOCKER_IIMAGE_TAG,
+                                dockerfile: 'Dockerfile',
+                                context: '.'
+                            )
+                        }
+                    }
+                }
+            }    
+        }
+        stage('Run Unit Tests'){
+            steps {
+                script {
+                    runUnitTests()
+                }
+            }
+        }
+        stage('Security Scan with Trivy') {
+            steps {
+                script {
+                    sh "mkdir -p trivy-result",
+                    echo "start for checking security"
+                    
+                    trivyScan(
+                        imageName: env.DOCKER_IMAGE_FRONTEND_NAME,
+                        imageTag: env.DOCKER_IMAGE_TAG,
+                        threshold: 150,
+                        severity: 'HIGH,CRITICAL'
+                        
+                    )
+                    echo "scaning for backend"
+                    trivyScan(
+                        imageName: env.DOCKER_IMAGE_BACKEND_NAME,
+                        imageTag: env.DOCKER_IMAGE_TAG,
+                        threshold: 150,
+                        severity: 'HIGH,CRITICAL'
+                    )
+                    echo "scaning for admin"
+                    trivyScan(
+                        imageName: env.DOCKER_IMAGE_ADMIN_NAME,
+                        imageTag: env.DOCKER_IMAGE_TAG,
+                        threshold: 150,
+                        severity: 'HIGH,CRITICAL'
+                    )
+                }
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'trivy-results/*.json,trivy-results/*.html', allowEmptyArchive: true
+                }
+            }
+        }
+        stage('Push to DockerHub') {
+            parallel {
+                stage ('frontend image push') {
+                    steps {
+                        script {
+                            imageName: env.DOCKER_IMAGE_FRONTEND_NAME
+                            imageTag: env.DOCKER_IMAGE_TAG
+                            credentails: 'DockerHubCreds'
+                        }
+                    }
+                }
+                stage ('backend image push') {
+                    steps {
+                        script {
+                            imageName: env.DOCKER_IMAGE_BACKEND_NAME
+                            imageTag: env.DOCKER_IMAGE_TAG
+                            credentails: 'DockerHubCreds'
+                        }
+                    }
+                }
+                stage ('admin image push') {
+                    steps {
+                        script {
+                            imageName: env.DOCKER_IMAGE_ADMIN_NAME
+                            imageTag: env.DOCKER_IMAGE_TAG
+                            credentails: 'DockerHubCreds'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
