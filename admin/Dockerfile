@@ -12,7 +12,7 @@ COPY admin/package-lock.json ./
 RUN npm install
 
 # Copy the rest of the application code to the working directory
-COPY . .
+COPY admin/ .
 # Build the application
 RUN npm run build
 
