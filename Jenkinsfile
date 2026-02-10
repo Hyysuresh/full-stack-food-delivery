@@ -25,9 +25,7 @@ pipeline {
         }
         stage("clean workspace") {
             steps {
-                script {
-                    cleanupWorkspace()
-                }
+                cleanWs()
             }
         }
         stage('clone Repo') {
