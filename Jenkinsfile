@@ -33,7 +33,7 @@ pipeline {
         stage('clone Repo') {
             steps {
                 script {
-                    cloneRepo()
+                    checkoutRepo()
                 }
             }
         }
