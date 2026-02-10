@@ -13,7 +13,7 @@ COPY frontend/package-lock.json ./
 RUN npm install 
 
 #copy the rest of the application code to the working directory
-COPY . .
+COPY frontend/ .
 #build the application
 RUN npm run build
 
@@ -23,7 +23,7 @@ FROM nginx:alpine AS production
 #copy the built application from the builder stage to the nginx html directory
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 #expose port 80 for nginx
 EXPOSE 80
