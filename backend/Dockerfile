@@ -12,7 +12,7 @@ COPY backend/package-lock.json ./
 RUN npm install
 ENV NODE_ENV=production
 # Copy the rest of the application code to the working directory
-COPY . .
+COPY backend/ .
 
 # Build the application
 EXPOSE 4000
