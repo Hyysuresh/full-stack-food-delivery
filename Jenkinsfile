@@ -1,14 +1,19 @@
 @Library('Jenkins-shared-lib@main') _
 pipeline {
     agent any
-    
+
+    options {
+        timeout(time: 30, unit: 'MINUTES')
+        timestamps()
+    }
     environment {
         DOCKER_IMAGE_FRONTEND_NAME= 'hyysuresh/food-delivery-frontend'
         DOCKER_IMAGE_BACKEND_NAME = 'hyysuresh/food-delivery-backend'
         DOCKER_IMAGE_ADMIN_NAME = 'hyysuresh/food-delivery-admin'
         DOCKER_IMAGE_TAG = '${BUILD_NUMBER}'
+        JOB_NAME = 'jenkins-pipeline-food-delivery'
         GIT_BRANCH = 'main'
-        
+        BUILD_URL = '${BUILD_URL}'
     }
     stages {
         stage('Check  ci skip') {
@@ -29,7 +34,7 @@ pipeline {
                 cleanWs()
             }
         }
-        stage('clone Repo') {
+        stage('Checkout Code') {
             steps {
                 script {
                     checkoutRepo()
@@ -112,11 +117,7 @@ pipeline {
                     )
                 }
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'trivy-results/*.json,trivy-results/*.html', allowEmptyArchive: true
-                }
-            }
+            
         }
         stage('Push to DockerHub') {
             parallel {
@@ -155,5 +156,64 @@ pipeline {
                 }
             }
         }
+        post {
+            always {
+                archiveArtifacts artifacts: 'trivy-results/*.json,trivy-results/*.html', allowEmptyArchive: true
+            }
+            success {
+                echo "Pipeline completed successfully"
+            }
+            failure {
+                echo "Pipeline failed"
+            }
+        }
+    }
+    post {
+        success {
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+                body: """
+                Good news!
+
+                Build completed successfully.
+
+                Job Name: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                Branch: ${env.GIT_BRANCH}
+
+                Build URL:
+                ${env.BUILD_URL}
+
+                Regards,
+                Jenkins CI
+                """,
+                to: "sghasal5@gmail.com"
+            )
+        }
+
+        failure {
+            emailext(
+                subject: "FAILED: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+                body: """
+                Attention Required!
+
+                Build has failed.
+
+                Job Name: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                Branch: ${env.GIT_BRANCH}
+
+                Console Output:
+                ${env.BUILD_URL}console
+
+                Please check logs and fix the issue.
+
+                Regards,
+                Jenkins CI
+                """,
+                to: "sghasal5@gmail.com"
+            )
+        }
     }
 }
+
