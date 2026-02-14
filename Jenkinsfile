@@ -168,52 +168,53 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            emailext(
-                subject: "SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
-                body: """
-                Good news!
-
-                Build completed successfully.
-
-                Job Name: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-                Branch: ${env.GIT_BRANCH}
-
-                Build URL:
-                ${env.BUILD_URL}
-
-                Regards,
-                Jenkins CI
-                """,
-                to: "sghasal5@gmail.com"
-            )
-        }
-
-        failure {
-            emailext(
-                subject: "FAILED: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
-                body: """
-                Attention Required!
-
-                Build has failed.
-
-                Job Name: ${env.JOB_NAME}
-                Build Number: ${env.BUILD_NUMBER}
-                Branch: ${env.GIT_BRANCH}
-
-                Console Output:
-                ${env.BUILD_URL}console
-
-                Please check logs and fix the issue.
-
-                Regards,
-                Jenkins CI
-                """,
-                to: "sghasal5@gmail.com"
-            )
-        }
-    }
 }
+//     post {
+//         success {
+//             emailext(
+//                 subject: "SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+//                 body: """
+//                 Good news!
+
+//                 Build completed successfully.
+
+//                 Job Name: ${env.JOB_NAME}
+//                 Build Number: ${env.BUILD_NUMBER}
+//                 Branch: ${env.GIT_BRANCH}
+
+//                 Build URL:
+//                 ${env.BUILD_URL}
+
+//                 Regards,
+//                 Jenkins CI
+//                 """,
+//                 to: "sghasal5@gmail.com"
+//             )
+//         }
+
+//         failure {
+//             emailext(
+//                 subject: "FAILED: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+//                 body: """
+//                 Attention Required!
+
+//                 Build has failed.
+
+//                 Job Name: ${env.JOB_NAME}
+//                 Build Number: ${env.BUILD_NUMBER}
+//                 Branch: ${env.GIT_BRANCH}
+
+//                 Console Output:
+//                 ${env.BUILD_URL}console
+
+//                 Please check logs and fix the issue.
+
+//                 Regards,
+//                 Jenkins CI
+//                 """,
+//                 to: "sghasal5@gmail.com"
+//             )
+//         }
+//     }
+// }
 
