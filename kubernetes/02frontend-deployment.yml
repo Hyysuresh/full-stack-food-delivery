@@ -1,0 +1,31 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: food-delivery-frontend-deployment
+  namespace: food-delivery
+  labels:
+    app: food-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: food-frontend
+  template:
+    metadata:
+      labels:
+        app: food-frontend
+    spec:
+      containers:
+        - name: food-delivery-frontend
+          image: hyysuresh/food-delivery-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+

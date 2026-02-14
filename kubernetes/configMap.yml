@@ -1,0 +1,8 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: backend-configmap 
+  namespace: food-delivery 
+data:
+   MONGODB_URI: "mongodb://mongodb-0.mongodb-service.food-delivery.svc.cluster.local:27017/food"
+   

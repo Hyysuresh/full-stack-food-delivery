@@ -1,0 +1,12 @@
+kind: Service 
+apiVersion: v1
+metadata:
+  name: admin-service 
+  namespace: food-delivery 
+spec:
+  selector:
+    app: food-admin
+  ports:
+    - targetPort: 5173
+      port: 5173
+      protocol: TCP 
