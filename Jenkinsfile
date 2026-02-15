@@ -12,7 +12,6 @@ pipeline {
         DOCKER_IMAGE_ADMIN_NAME = 'hyysuresh/food-delivery-admin'
         DOCKER_IMAGE_TAG = '${BUILD_NUMBER}'
         JOB_NAME = 'jenkins-pipeline-food-delivery'
-        GITHUB_CREDENTIALS = credentials('GitHubCreds')
         GIT_BRANCH = 'main'
         BUILD_URL = '${BUILD_URL}'
     }
@@ -168,7 +167,7 @@ pipeline {
                     updateK8sManifests(
                         imageTag: env.DOCKER_IMAGE_TAG,
                         manifestsPath: 'kubernetes',
-                        gitCredentials: env.GITHUB_CREDENTIALS,
+                        gitCredentials: 'GitHubCreds',
                         gitUserName: 'Hyysuresh',
                         gitUserEmail: 'sghasal5@gmail.com'
                     )
