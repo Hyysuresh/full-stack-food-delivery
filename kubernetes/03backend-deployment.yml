@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: food-delivery-backend
-          image: hyysuresh/food-delivery-backend:latest
+          image: hyysuresh/food-delivery-backend:20
           imagePullPolicy: Always
           ports:
             - containerPort: 4000

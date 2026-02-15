@@ -1,0 +1,14 @@
+{
+            "Results": [
+                {
+                    "Target": "hyysuresh/food-delivery-frontend:${BUILD_NUMBER}",
+                    "Vulnerabilities": [
+                        {
+                            "VulnerabilityID": "DUMMY-001",
+                            "Title": "Dummy vulnerability for failed scan",
+                            "Severity": "UNKNOWN"
+                        }
+                    ]
+                }
+            ]
+        }
