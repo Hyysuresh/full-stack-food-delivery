@@ -161,6 +161,19 @@ pipeline {
                 
             }
         }
+        stage('Update Kubernetes Manifests') {
+            steps {
+                script {
+                    updateK8sManifests(
+                        imageTag: env.DOCKER_IMAGE_TAG,
+                        manifestsPath: 'kubernetes',
+                        gitCredentials: 'GitHubCreds',
+                        gitUserName: 'Hyysuresh',
+                        gitUserEmail: 'sghasal5@gmail.com'
+                    )
+                }
+            }
+        }
     }
     post {
         success {
