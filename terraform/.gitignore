@@ -1,0 +1,6 @@
+.terraform
+aws
+.terraform.lock.hcl
+awscliv2.zip
+terraform.tfstate
+terraform.tfstate.backup

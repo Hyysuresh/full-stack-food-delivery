@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: backend-configmap 
+  namespace: food-delivery 
+data:
+    MONGODB_URI: "mongodb://mongodb-0.mongodb-service.food-delivery.svc.cluster.local:27017/food"
+    NEXT_PUBLIC_API_URL: "https://dealgo.food/api"
+    NEXTAUTH_URL: "https://dealgo.food/"
+    NEXTAUTH_SECRET: "YLODGyQpd66imDHDBpyx11tA7pcZd6UY9yyx4fzK80I="

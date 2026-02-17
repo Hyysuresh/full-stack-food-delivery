@@ -1,0 +1,12 @@
+kind: Service 
+apiVersion: v1
+metadata:
+  name: frontend-service 
+  namespace: food-delivery
+spec:
+  selector:
+    app: food-frontend
+  ports:
+    - protocol: TCP
+      targetPort: 80
+      port: 80
